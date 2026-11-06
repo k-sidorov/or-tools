@@ -67,6 +67,9 @@ int SolverLogger::GetNewThrottledId() {
 }
 
 bool SolverLogger::RateIsOk(const ThrottlingData& data) {
+  // planted-instances patch: never throttle, so that every bound update reaches the log when it
+  // happens (a held-back "#Bound" line is only flushed at exit in pure dual search).
+  return true;
   const double time = std::max(1.0, timer_.Get());
   const double rate =
       static_cast<double>(data.num_displayed_logs - throttling_threshold_) /
